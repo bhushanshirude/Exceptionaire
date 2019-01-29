@@ -15,6 +15,7 @@ export class DemoFileUploadComponent implements OnInit {
   imgURL: any;
   url: any;
   Logo: any;
+  images;
   constructor(private slimLoadingBarService: SlimLoadingBarService, private http: HttpClient) { }
 
   ngOnInit() { }
@@ -63,7 +64,7 @@ export class DemoFileUploadComponent implements OnInit {
     this.showMessage = false;
     console.log(this.selectedFile.name);
     fd.append('file', this.selectedFile, this.selectedFile.name);
-    
+
     this.http.post(`/api/upload-file`, fd, {
       reportProgress: true, observe: 'events'
     }).subscribe((event: HttpEvent<any>) => {
@@ -92,5 +93,34 @@ export class DemoFileUploadComponent implements OnInit {
         this.slimLoadingBarService.reset();
       });
   }
-  // }
+
+  View() {
+    // this.http.get(`/api/getData`, {
+    //   reportProgress: true, observe: 'events'
+    // }).subscribe((event: HttpEvent<any>) => {
+    //   console.log("data", event)
+    // },
+    //   error => {
+    //     console.log(error);
+    //   });
+    fetch("http://localhost:3000/api/getData", {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json;charset=UTF-8'
+      }
+    }).then(response => response.json()).then(data => {
+      console.log("DATA", data.results);
+      if (data.success == true) {
+        for (let i = 0; i <= data.results.length; i++) {
+          this.images = data.results;
+          console.log("Nishant", data.results);
+        }
+      } else {
+        console.log("Error Occour")
+      }
+    })
+
+  }
+
+
 }

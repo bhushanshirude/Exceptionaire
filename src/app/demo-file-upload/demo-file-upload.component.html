@@ -2,8 +2,8 @@
   <div class="card" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title">Demo File Upload</h5>
-      <input type="file" class="form-control-file" (change)="onFileSelected($event)" (change)="readUrl($event)"
-        (change)="handleUpload($event)">
+      <input type="file" class="form-control-file" accept=".png, .jpg, .jpeg" (change)="onFileSelected($event)"
+        (change)="readUrl($event)" (change)="handleUpload($event)">
       <div class="slimbar-container">
         <ng2-slim-loading-bar></ng2-slim-loading-bar>
       </div>
@@ -17,7 +17,16 @@
       <button class="card-link" type="button" (click)="onUpload()">Upload</button>
     </div>
   </div>
+  <!-- <button (click)="View()">View</button> -->
 </form>
+<button (click)="View()">View</button>
+
+
+<div *ngFor="let data of images">
+  {{data.image_name}}
+  <img src="/public/my-files/{{data.image_name}}">
+  <img src="assets/Emergency.png">
+</div>
 
 <!-- <h3>Angular 7 Image Preview before Upload:</h3>
 <span style="color:red;" *ngIf="message">{{message}}</span>

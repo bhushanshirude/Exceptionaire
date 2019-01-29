@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-// var base64Img = require('base64-img');
+
 router.post('/upload-file', function (req, res, next) {
   var fstream;
   if (req.busboy) {
-
     req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
       fstream = fs.createWriteStream(__dirname + '/../../public/my-files/' + filename);
       file.pipe(fstream);
@@ -33,13 +32,35 @@ router.post('/upload-file', function (req, res, next) {
     });
     req.pipe(req.busboy);
   }
-
-
 });
 
-router.post('/user', function (req, res) {
+router.get('/getData', function (request, response) {
+  console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", response)
+  var MongoClient = require('mongodb').MongoClient;
+  var url = "mongodb://localhost:27017/";
 
-
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("mydb");
+    dbo.collection("customers").find({}).toArray(function(err, result) {
+      if (err) throw err;
+      console.log("Nishant",result);
+      response.json({ success: true ,results: result});
+      db.close();
+    });
 });
 
-module.exports = router;
+}),
+
+// console.log("Nishant",url)
+//   MongoClient.connect(url, function(err, db) {
+//     if (err) throw err;
+//     var dbo = db.db("mydb");
+//     dbo.collection("customers").find({}).toArray(function(err, result) {
+//       if (err) throw err;
+//       console.log(result);
+//       db.close();
+//     });
+//   });
+
+  module.exports = router;
